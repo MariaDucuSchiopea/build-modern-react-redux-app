@@ -4,7 +4,7 @@ import { BsFillCaretUpFill } from 'react-icons/bs';
 import finnHub from '../apis/finnHub';
 
 export const StockList = () => {
-  const [stock, setStock] = useState();
+  const [stock, setStock] = useState([]);
   const [watchList, setWatchList] = useState([
     'GOOGL',
     'MSFT',
