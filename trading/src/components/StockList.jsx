@@ -4,24 +4,12 @@ import { BsFillCaretUpFill } from 'react-icons/bs';
 import finnHub from '../apis/finnHub';
 
 export const StockList = () => {
-  const [stock, setStock] = useState();
+  const [stock, setStock] = useState([]);
   const [watchList, setWatchList] = useState([
     'GOOGL',
     'MSFT',
     'AMZN',
   ]);
-
-  const changeColor = (change) => {
-    return change > 0 ? 'success' : 'danger';
-  };
-
-  const renderIcon = (change) => {
-    return change > 0 ? (
-      <BsFillCaretUpFill />
-    ) : (
-      <BsFillCaretDownFill />
-    );
-  };
 
   useEffect(() => {
     let isMounted = true;
@@ -43,7 +31,7 @@ export const StockList = () => {
             symbol: response.config.params.symbol,
           };
         });
-        console.log(data);
+        console.log('Debug', data);
         if (isMounted) {
           setStock(data);
         }
@@ -53,7 +41,19 @@ export const StockList = () => {
     fetchData();
 
     return () => (isMounted = false);
-  }, [watchList]);
+  }, []);
+
+  const changeColor = (change) => {
+    return change > 0 ? 'success' : 'danger';
+  };
+
+  const renderIcon = (change) => {
+    return change > 0 ? (
+      <BsFillCaretUpFill />
+    ) : (
+      <BsFillCaretDownFill />
+    );
+  };
 
   return (
     <div>
@@ -73,7 +73,7 @@ export const StockList = () => {
         <tbody>
           {stock.map((stockData) => {
             return (
-              <tr className="table-row">
+              <tr className="table-row" key={stockData.symbol}>
                 <th scope="row">{stockData.symbol}</th>
                 <td>{stockData.data.c}</td>
                 <td
