@@ -6,6 +6,7 @@ import { WatchListContext } from '../context/watchListContext';
 
 export const StockList = () => {
   const [stock, setStock] = useState([]);
+<<<<<<< HEAD
   const { watchList } = useContext(WatchListContext);
   const changeColor = (change) => {
     return change > 0 ? 'success' : 'danger';
@@ -18,6 +19,13 @@ export const StockList = () => {
       <BsFillCaretDownFill />
     );
   };
+=======
+  const [watchList, setWatchList] = useState([
+    'GOOGL',
+    'MSFT',
+    'AMZN',
+  ]);
+>>>>>>> 74a694fe1ae681d4a3da5162ac3174de1905749e
 
   useEffect(() => {
     let isMounted = true;
@@ -39,7 +47,7 @@ export const StockList = () => {
             symbol: response.config.params.symbol,
           };
         });
-        console.log(data);
+        console.log('Debug', data);
         if (isMounted) {
           setStock(data);
         }
@@ -49,7 +57,19 @@ export const StockList = () => {
     fetchData();
 
     return () => (isMounted = false);
-  }, [watchList]);
+  }, []);
+
+  const changeColor = (change) => {
+    return change > 0 ? 'success' : 'danger';
+  };
+
+  const renderIcon = (change) => {
+    return change > 0 ? (
+      <BsFillCaretUpFill />
+    ) : (
+      <BsFillCaretDownFill />
+    );
+  };
 
   return (
     <div>
