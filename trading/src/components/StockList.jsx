@@ -34,7 +34,6 @@ export const StockList = () => {
         }
       } catch (err) {}
     };
-
     fetchData();
 
     return () => (isMounted = false);
