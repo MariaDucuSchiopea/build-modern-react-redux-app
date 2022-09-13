@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { BsFillCaretDownFill } from 'react-icons/bs';
 import { BsFillCaretUpFill } from 'react-icons/bs';
 import finnHub from '../apis/finnHub';
@@ -6,7 +7,8 @@ import { WatchListContext } from '../context/watchListContext';
 
 export const StockList = () => {
   const [stock, setStock] = useState([]);
-  const { watchList } = useContext(WatchListContext);
+  const { watchList, deleteStock } = useContext(WatchListContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let isMounted = true;
@@ -28,7 +30,7 @@ export const StockList = () => {
             symbol: response.config.params.symbol,
           };
         });
-        console.log('Debug', data);
+        // console.log('Debug', data);
         if (isMounted) {
           setStock(data);
         }
@@ -38,6 +40,10 @@ export const StockList = () => {
 
     return () => (isMounted = false);
   }, [watchList]);
+
+  const handleStockSelect = (symbol) => {
+    navigate(`detail/${symbol}`);
+  };
 
   const changeColor = (change) => {
     return change > 0 ? 'success' : 'danger';
@@ -69,7 +75,12 @@ export const StockList = () => {
         <tbody>
           {stock.map((stockData) => {
             return (
-              <tr className="table-row" key={stockData.symbol}>
+              <tr
+                onClick={() => handleStockSelect(stockData.symbol)}
+                style={{ cursor: 'pointer' }}
+                className="table-row"
+                key={stockData.symbol}
+              >
                 <th scope="row">{stockData.symbol}</th>
                 <td>{stockData.data.c}</td>
                 <td
@@ -87,7 +98,18 @@ export const StockList = () => {
                 <td>{stockData.data.h}</td>
                 <td>{stockData.data.l}</td>
                 <td>{stockData.data.o}</td>
-                <td>{stockData.data.pc}</td>
+                <td>
+                  {stockData.data.pc}
+                  <button
+                    className="btn btn-danger btn-sm m-1  d-inline-block delete-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteStock(stockData.symbol);
+                    }}
+                  >
+                    Remove
+                  </button>
+                </td>
               </tr>
             );
           })}
